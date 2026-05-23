@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 from datetime import datetime, date
 
+# bot username: apt226bot
 
 def format_timedelta(td):
     total_seconds = int(td.total_seconds())
@@ -10,9 +11,6 @@ def format_timedelta(td):
     minutes = (total_seconds % 3600) // 60
 
     return f"{hours} hours {minutes} minutes"
-
-
-# bot username: apt226bot
 
 # Telegram info
 TOKEN = "8794816467:AAHA01In7gn9-H69G5V68LdK9DBqAB5hrjQ"
@@ -27,14 +25,12 @@ users_DF = pd.read_csv("users.csv")
 # Today's date
 today = str(date.today())
 
-# Filter today's appointments -> GET THE APTS WE'RE INTERESTED IN 
-# We don't have to just do today's appointments
-# We could easily get tomorrow's, or all of this week, etc etc
-
 # Current time
 now = datetime.now()
 
-# Filter today's appointments
+# Filter today's appointments -> GET THE APTS WE'RE INTERESTED IN 
+# We don't have to just do today's appointments
+# We could easily get tomorrow's, or all of this week, etc etc
 today_appts = apts_DF[apts_DF["date"] == today].copy()
 
 # Combine date + time columns into full datetime
@@ -42,10 +38,12 @@ today_appts["appointment_datetime"] = pd.to_datetime(
     today_appts["date"] + " " + today_appts["time"]
 )
 
+# Compute the difference between time till and now
 today_appts["time_till"] = (
     today_appts["appointment_datetime"] - now
 )
 
+# format time till s.t. it's nice
 today_appts["time_till_str"] = today_appts["time_till"].apply(format_timedelta)
 
 ## IF there are any apts we want, send a text
