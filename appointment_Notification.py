@@ -2,7 +2,13 @@ import pandas as pd
 import requests
 from datetime import datetime, date
 
-# bot username: apt226bot
+### bot username: apt226bot
+
+def load_token():
+    with open("setup.txt", "r") as file:
+        for line in file:
+            if line.startswith("TOKEN="):
+                return line.strip().split("=", 1)[1]
 
 def format_timedelta(td):
     total_seconds = int(td.total_seconds())
@@ -13,8 +19,8 @@ def format_timedelta(td):
     return f"{hours} hours {minutes} minutes"
 
 # Telegram info
-TOKEN = "8794816467:AAHA01In7gn9-H69G5V68LdK9DBqAB5hrjQ"
-## CHAT_ID = "8662593057"
+TOKEN=load_token()
+
 
 # Read appointments
 apts_DF = pd.read_csv("ex.csv")
